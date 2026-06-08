@@ -1,0 +1,27 @@
+# Node
+urban-pulse/node_modules/
+urban-pulse/dist/
+urban-pulse/.vite/
+urban-pulse/.env
+
+# Python
+backend/__pycache__/
+backend/analytics/__pycache__/
+backend/data/__pycache__/
+backend/routes/__pycache__/
+backend/.env
+*.pyc
+*.pyo
+__pycache__/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
