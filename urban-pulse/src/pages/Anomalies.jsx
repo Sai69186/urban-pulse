@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import { fetchAnomalies, fetchAnomalySummary, fetchStatAnomalies } from "../api/endpoints";
 import { anomalies as AN_FB } from "../data/cityData";
 import SectionCard from "../components/SectionCard";
@@ -13,7 +14,7 @@ const SEVN = ["critical","high","medium","low"];
 export default function Anomalies() {
   const [filter, setFilter] = useState("all");
 
-  const { results, loading, errors } = useMultiApi({
+  const { results, loading, errors, refresh } = useMultiApi({
     list:    fetchAnomalies,
     summary: fetchAnomalySummary,
     stats:   fetchStatAnomalies,
@@ -23,6 +24,7 @@ export default function Anomalies() {
   const summary = results.summary;
   const statAn  = results.stats;
   const hasError = Object.keys(errors).length > 0;
+  useUploadRefresh(refresh);
 
   const filtered = filter === "all" ? all : all.filter(a => a.severity === filter);
 

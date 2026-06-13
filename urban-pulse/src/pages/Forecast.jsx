@@ -4,6 +4,7 @@ import {
   BarChart, Bar, Cell,
 } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import {
   fetchForecasts, fetchForecastChart,
   fetchTopCorrelations, fetchPairwiseStats,
@@ -24,7 +25,7 @@ const METRIC_META = {
 };
 
 export default function Forecast() {
-  const { results, loading, errors } = useMultiApi({
+  const { results, loading, errors, refresh } = useMultiApi({
     forecasts:    fetchForecasts,
     chart:        fetchForecastChart,
     topCorr:      fetchTopCorrelations,
@@ -36,6 +37,7 @@ export default function Forecast() {
   const topCorr   = results.topCorr?.data;
   const pairwise  = results.pairwise?.data;
   const hasError  = Object.keys(errors).length > 0;
+  useUploadRefresh(refresh);
 
   return (
     <div className="fade-in">

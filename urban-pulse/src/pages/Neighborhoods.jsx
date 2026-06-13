@@ -4,6 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import { fetchNeighborhoods, fetchZoneSummary, fetchGapAnalysis, fetchImprovements } from "../api/endpoints";
 import { neighborhoodScores as NB_FB } from "../data/cityData";
 import SectionCard from "../components/SectionCard";
@@ -19,7 +20,7 @@ function scoreColor(v) { return v >= 70 ? "#10b981" : v >= 50 ? "#f59e0b" : "#ef
 function gradeColor(g) { return g==="A"?"#10b981":g==="B"?"#3b82f6":g==="C"?"#f59e0b":"#ef4444"; }
 
 export default function Neighborhoods() {
-  const { results, errors } = useMultiApi({
+  const { results, errors, refresh } = useMultiApi({
     scores: fetchNeighborhoods,
     zones:  fetchZoneSummary,
     gaps:   fetchGapAnalysis,
@@ -31,6 +32,7 @@ export default function Neighborhoods() {
   const gaps    = results.gaps;
   const improv  = results.improv;
   const hasError = Object.keys(errors).length > 0;
+  useUploadRefresh(refresh);
   const [selected, setSelected] = useState(null);
   const active = selected || scores[0];
 

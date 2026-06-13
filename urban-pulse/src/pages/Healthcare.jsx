@@ -3,6 +3,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import { fetchHealthcare, fetchIcuAnalysis, fetchRespiratoryAqi, fetchResponseTime, fetchPublicHealthScore } from "../api/endpoints";
 import { healthData as H_FB } from "../data/cityData";
 import StatCard from "../components/StatCard";
@@ -13,7 +14,7 @@ import { ErrorBanner } from "../components/LoadingState";
 const TOOLTIP = { background:"#1e293b", border:"1px solid #2d3f55", color:"#e2e8f0", borderRadius:8, fontSize:12 };
 
 export default function Healthcare() {
-  const { results, loading, errors } = useMultiApi({
+  const { results, loading, errors, refresh } = useMultiApi({
     raw:       fetchHealthcare,
     icu:       fetchIcuAnalysis,
     respAqi:   fetchRespiratoryAqi,
@@ -28,6 +29,7 @@ export default function Healthcare() {
   const score    = results.score;
   const latest   = data[data.length - 1] || {};
   const hasError = Object.keys(errors).length > 0;
+  useUploadRefresh(refresh);
 
   const tableColumns = [
     { key:"month",             label:"Month" },

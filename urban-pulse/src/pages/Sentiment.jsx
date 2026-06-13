@@ -3,6 +3,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area,
 } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import { fetchSentiment, fetchSentimentTrend, fetchSentimentReports, fetchSentimentSummary } from "../api/endpoints";
 import { citizenSentiment as S_FB, sentimentTrend as ST_FB, citizenReports as CR_FB } from "../data/cityData";
 import StatCard from "../components/StatCard";
@@ -14,7 +15,7 @@ const SENT_COLOR = { positive:"#10b981", neutral:"#f59e0b", negative:"#ef4444" }
 const SENT_EMOJI = { positive:"😊", neutral:"😐", negative:"😞" };
 
 export default function Sentiment() {
-  const { results, errors } = useMultiApi({
+  const { results, errors, refresh } = useMultiApi({
     data:    fetchSentiment,
     trend:   fetchSentimentTrend,
     reports: fetchSentimentReports,
@@ -26,6 +27,7 @@ export default function Sentiment() {
   const reports   = results.reports?.data || CR_FB;
   const summary   = results.summary;
   const hasError  = Object.keys(errors).length > 0;
+  useUploadRefresh(refresh);
 
   const overallPie = [
     { name:"Positive", value: summary?.overall_positive || 52, fill:"#10b981" },

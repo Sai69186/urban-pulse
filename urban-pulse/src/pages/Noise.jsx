@@ -3,6 +3,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import { fetchNoise, fetchNoiseStats, fetchNoiseWho, fetchNoiseSource, fetchNoiseTrend } from "../api/endpoints";
 import { noiseData as N_FB } from "../data/cityData";
 import StatCard from "../components/StatCard";
@@ -14,7 +15,7 @@ const TOOLTIP = { background:"#1e293b", border:"1px solid #2d3f55", color:"#e2e8
 const WHO_DAY = 53, WHO_NIGHT = 45;
 
 export default function Noise() {
-  const { results, errors } = useMultiApi({
+  const { results, errors, refresh } = useMultiApi({
     raw:    fetchNoise,
     who:    fetchNoiseWho,
     source: fetchNoiseSource,
@@ -27,6 +28,7 @@ export default function Noise() {
   const trend  = results.trend;
   const latest = data[data.length - 1] || {};
   const hasError = Object.keys(errors).length > 0;
+  useUploadRefresh(refresh);
 
   const dayViolations   = data.filter(d => d.avgDecibels    > WHO_DAY).length;
   const nightViolations = data.filter(d => d.nighttimeNoise > WHO_NIGHT).length;

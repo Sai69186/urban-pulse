@@ -9,6 +9,12 @@ import api from "./client";
 export const fetchOverview           = () => api.get("/api/overview");
 export const fetchHealthCheck        = () => api.get("/api/health");
 
+// ── Upload ───────────────────────────────────────────────────────────────────
+export const fetchUploadStatus       = () => api.get("/api/upload/status");
+export const fetchTemplates          = () => api.get("/api/upload/templates");
+export const clearUploadedDataset    = (type) => api.delete(`/api/upload/${type}`);
+export const clearAllUploaded        = () => api.delete("/api/upload/");
+
 // ── Air Quality ──────────────────────────────────────────────────────────────
 export const fetchAirQuality         = () => api.get("/api/air-quality/");
 export const fetchAirQualityStats    = () => api.get("/api/air-quality/statistics");

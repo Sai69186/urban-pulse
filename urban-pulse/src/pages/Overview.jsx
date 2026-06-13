@@ -4,9 +4,10 @@ import {
   LineChart, Line, ResponsiveContainer, Cell,
 } from "recharts";
 import { useMultiApi } from "../hooks/useApi";
+import { useUploadRefresh } from "../hooks/useUploadRefresh";
 import {
   fetchOverview, fetchNeighborhoods,
-  fetchAirQuality, fetchCrime, fetchTopCorrelations,
+  fetchAirQuality, fetchCrime,
 } from "../api/endpoints";
 import {
   neighborhoodScores as NBHD_FB,
@@ -32,7 +33,7 @@ const STATIC_CORR = [
 ];
 
 export default function Overview() {
-  const { results, loading, errors } = useMultiApi({
+  const { results, loading, errors, refresh } = useMultiApi({
     kpi:    fetchOverview,
     nbhd:   fetchNeighborhoods,
     aq:     fetchAirQuality,
@@ -43,6 +44,9 @@ export default function Overview() {
     aq:    { data: AQ_FB },
     crime: { data: CR_FB },
   });
+
+  // Re-fetch whenever user uploads new data
+  useUploadRefresh(refresh);
 
   const kpi    = results.kpi   || KPI_FB;
   const nbhd   = (results.nbhd?.data  || NBHD_FB);
